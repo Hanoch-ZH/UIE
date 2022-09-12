@@ -1,0 +1,26 @@
+# project name
+project_name: "UnderwaterImageEnhancement"
+run_name: "baseline"
+
+# dataset settings
+dataset_root: "/data_hdd2/users/ZhouHeng/Data/UIE/EUVP_Dataset/"
+paired: True
+height: 256
+width: 256
+
+# model settings
+pre_trained: False
+# when 'pre_trained' is true, 'pre_weight' should be given
+pre_weight: None
+save_path: "/data_hdd2/users/ZhouHeng/Data/UIE/EUVP_Dataset/Output/"
+
+
+# commom settings
+num_epoch: 100
+batch_size: 24
+lr: 0.01
+lr_b1: 0.5
+lr_b2: 0.99
+lambda_1: 0.3
+lambda_2: 0.7
+validate_interval: 10
