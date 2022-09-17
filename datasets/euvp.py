@@ -13,9 +13,12 @@ class EUVPDataset(Dataset):
         if self.split == 'train':
             self.train_a, self.train_b = get_file_paths(root=root, split=self.split, paired=self.paired)
             self.len = min(len(self.train_a), len(self.train_b))
-        else:
+        elif self.split == 'val':
             self.val = get_file_paths(root=root, split=self.split, paired=self.paired)
             self.len = len(self.val)
+        else:
+            self.data, self.label = get_file_paths(root=root, split=self.split)
+            self.len = len(self.data)
 
     def __getitem__(self, index):
         if self.split == 'train':
@@ -24,10 +27,16 @@ class EUVPDataset(Dataset):
             img_a = self.transform(img_a)
             img_b = self.transform(img_b)
             return {"A": img_a, "B": img_b}
-        else:
+        elif self.split == 'val':
             img_val = Image.open(self.val[index % self.len])
             img_val = self.transform(img_val)
-            return {"val": img_val}
+            img_path = str(self.val[index % self.len])
+            return {"val": img_val}, img_path
+        else:
+            data = self.transform(Image.open(self.data[index % self.len]))
+            label = self.transform(Image.open(self.label[index % self.len]))
+            img_path = str(self.data[index % self.len])
+            return {"data": data, "label": label}, img_path
 
     def __len__(self):
         return self.len

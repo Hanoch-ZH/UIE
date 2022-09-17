@@ -1,7 +1,5 @@
 import os
 import glob
-import yaml
-import wandb
 import torch
 import pathlib
 import math
@@ -23,16 +21,21 @@ def get_file_paths(root, split='train', paired=True):
             train_b = sorted(glob.glob(os.path.join(root, 'Unpaired', 'trainB') + "/*.*"))
 
         return train_a, train_b
-    else:
+    elif split == 'val':
         val = []
         if paired:
-            sub_dirs = os.listdir(os.path.join(root, 'Paired'))
+            # sub_dirs = os.listdir(os.path.join(root, 'Paired'))
+            sub_dirs = ['underwater_scenes']
             for sub_dir in sub_dirs:
-                val += sorted(glob.glob(os.path.join(root, sub_dir, 'validation') + "/*.*"))
+                val += sorted(glob.glob(os.path.join(root, 'Paired', sub_dir, 'validation') + "/*.*"))
         else:
             val = sorted(glob.glob(os.path.join(root, 'Unpaired', 'validation') + "/*.*"))
 
         return val
+    else:
+        data = sorted(glob.glob(os.path.join(root, 'Inp') + "/*.*"))
+        label = sorted(glob.glob(os.path.join(root, 'GTr') + "/*.*"))
+        return data, label
 
 
 def make_grid(
@@ -157,11 +160,4 @@ def save_image(
     ndarr = grid.mul(255).add_(0.5).clamp_(0, 255).permute(1, 2, 0).to('cpu', torch.uint8).numpy()
     im = Image.fromarray(ndarr)
     im.save(fp, format=format)
-
-
-def get_config(config_file):
-    run = wandb.init(reinit=True)
-    with open(config_file) as f:
-        cfg = yaml.load(f, Loader=yaml.FullLoader)
-        wandb.config.update(cfg)
 

@@ -4,6 +4,7 @@ run_name: "exp1"
 
 # dataset settings
 dataset_root: "/data_hdd2/users/ZhouHeng/Data/UIE/EUVP_Dataset/"
+test_dataset_root: "/data_hdd2/users/ZhouHeng/Data/UIE/EUVP_Dataset/test_samples/"
 paired: True
 height: 256
 width: 256
@@ -13,11 +14,13 @@ pre_trained: False
 # when 'pre_trained' is true, 'pre_weight' should be given
 pre_weight: None
 save_path: "/data_hdd2/users/ZhouHeng/Data/UIE/EUVP_Dataset/Output/"
+training_device_ids: [0, 1]
 
 
 # common settings
 num_epoch: 100
 batch_size: 24
+test_batch_size: 1
 lr: 0.05
 lr_b1: 0.5
 lr_b2: 0.99
